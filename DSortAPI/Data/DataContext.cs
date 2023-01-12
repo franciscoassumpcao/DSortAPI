@@ -10,6 +10,7 @@ namespace DSortAPI.Data
 
 		public DbSet<Document> Documents { get; set; }
 		public DbSet<Person> Persons { get; set; }
+		public DbSet<Scan> Scans { get; set; }
 
 		}
 	}
