@@ -8,6 +8,7 @@ namespace DSortAPI.Helpers.Mapper
 		public AutoMapperProfiles()
 			{
 			CreateMap<Document, Document>();
+			CreateMap<Person, Person>();
 
 
 			}

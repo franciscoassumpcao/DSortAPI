@@ -9,7 +9,6 @@ namespace DSortAPI.Controllers
 	[ApiController]
 	public class PersonController : ControllerBase
 		{
-		private static List<Person> Persons;
 		private readonly IMapper _mapper;
 		private DataContext _context;
 
@@ -41,6 +40,35 @@ namespace DSortAPI.Controllers
 			else return BadRequest("Persons not found");
 			}
 
+		[HttpDelete]
+		public async Task<ActionResult<List<Person>>> DeletePerson(int PersonId)
+			{
+			if (await _context.Persons.FindAsync(PersonId)== null){
+				return BadRequest("Person to remove not found");
+				}
+
+			_context.Persons.Remove(_context.Persons.FirstOrDefault(p=>p.Id==PersonId));
+			await _context.SaveChangesAsync();
+			return Ok();
+			}
+
+		[HttpPut]
+		public async Task<ActionResult<List<Person>>> UpdatePersonInfo(Person personToUpdate)
+			{
+
+
+			var personSearched = await _context.Documents.FindAsync(personToUpdate.Id);
+
+			if (personSearched == null) return BadRequest("Document ID not found");
+
+
+			_mapper.Map(personToUpdate, personSearched);
+			await _context.SaveChangesAsync();
+
+			return Ok(await _context.Persons.ToListAsync());
+
+
+			}
 
 
 
