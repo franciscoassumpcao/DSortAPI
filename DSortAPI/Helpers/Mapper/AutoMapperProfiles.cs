@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DSortAPI.Dto;
 using DSortAPI.Model;
 
 namespace DSortAPI.Helpers.Mapper
@@ -9,8 +10,8 @@ namespace DSortAPI.Helpers.Mapper
 			{
 			CreateMap<Document, Document>();
 			CreateMap<Person, Person>();
-
-
+			CreateMap<Scan, CreateScanDTO>();
+			CreateMap<CreateScanDTO, Scan>();
 			}
 
 

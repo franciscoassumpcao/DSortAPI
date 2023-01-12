@@ -1,14 +1,21 @@
-﻿using DSortAPI.Model;
+﻿using AutoMapper;
+using DSortAPI.Dto;
+using DSortAPI.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DSortAPI.Controllers
 	{
-	public class ScanController : Controller
+	[Route("api/[controller]")]
+	[ApiController]
+	public class ScanController : ControllerBase
 		{
-		public DataContext _context { get; }
-		public ScanController(DataContext context)
+		public DataContext _context { get; set; }
+		private IMapper _mapper;
+
+		public ScanController(DataContext context, IMapper mapper)
 			{
 			_context = context;
+			_mapper = mapper;
 			}
 
 		[HttpGet]
@@ -19,7 +26,22 @@ namespace DSortAPI.Controllers
 				.ToListAsync();
 
 			return scans;
+			}
 
+
+		[HttpPost]
+		public async Task<ActionResult<List<Scan>>> Create(CreateScanDTO request)
+			{
+			var document = await _context.Documents.FindAsync(request.DocumentId);
+			if (document == null) { return BadRequest("document not found"); }
+
+			var newScan = new Scan();
+			_mapper.Map(request, newScan);
+			newScan.Document = document;
+
+			_context.Scans.Add(newScan);
+			await _context.SaveChangesAsync();
+			return await Get(newScan.DocumentId);
 
 			}
 

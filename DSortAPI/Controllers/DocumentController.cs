@@ -9,7 +9,7 @@ namespace DSortAPI.Controllers
 	[ApiController]
 	public class DocumentController : ControllerBase
 		{
-		private readonly IMapper _mapper;
+		private IMapper _mapper;
 		private DataContext _context;
 
 		public DocumentController(IMapper mapper, DataContext context)
