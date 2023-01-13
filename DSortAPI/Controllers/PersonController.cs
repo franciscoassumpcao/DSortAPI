@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using DSortAPI.Dto;
 using DSortAPI.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -29,13 +30,49 @@ namespace DSortAPI.Controllers
 			await _context.SaveChangesAsync();
 
 			return Ok(await _context.Persons.ToListAsync());
+			}
 
+		[HttpPost("personDocument")]
+		public async Task<ActionResult<Person>> AddDocumentPerson(AddDocumentPersonDto request)
+			{
+			var document = await _context.Documents
+				.Where(d => d.Id == request.DocumentId)
+				.Include(d => d.Persons)
+				.FirstOrDefaultAsync();
+
+			if (document == null) { return NotFound("Document not found"); }
+
+			var person = await _context.Persons.FindAsync(request.PersonId);
+			if (person == null) { return NotFound("Person not found"); }
+
+			document.Persons.Add(person);
+			await _context.SaveChangesAsync();
+
+			return person;
+			}
+
+		[HttpGet("{personId}")]
+		public async Task<ActionResult<List<Person>>> GetPersonId(int personId)
+			{
+			var personSearched = await _context.Persons
+				.Where(p => p.Id == personId)
+				.Include(p => p.Documents)
+				.ToListAsync();
+
+			if (personSearched==null) return BadRequest("Persons not found");
+
+			return Ok(personSearched);
 			}
 
 		[HttpGet]
-		public async Task<ActionResult> Get()
+		public async Task<ActionResult<List<Person>>> GetAll()
 			{
-			if (_context.Persons.Any()) return Ok(await _context.Persons.ToListAsync());
+			if (_context.Persons.Any())
+				{
+				return Ok(await _context.Persons
+					.Include(p => p.Documents)
+					.ToListAsync());
+				}
 
 			else return BadRequest("Persons not found");
 			}

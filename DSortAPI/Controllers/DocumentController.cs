@@ -21,7 +21,8 @@ namespace DSortAPI.Controllers
 		[HttpGet]
 		public async Task<ActionResult<List<Document>>> GetAllDocuments()
 			{
-			var documentsSearched = await _context.Documents								
+			var documentsSearched = await _context.Documents
+				.Include(d => d.Persons)
 				.ToListAsync();
 
 			if (documentsSearched == null) return BadRequest("Documents not found");
@@ -33,8 +34,9 @@ namespace DSortAPI.Controllers
 		public async Task<ActionResult<List<Document>>> GetSingleDocument(int docId)
 			{
 			var documentSearched = await _context.Documents
-				.Where(d => d.Id == docId)				
-				.FirstOrDefaultAsync();				
+				.Where(d => d.Id == docId)
+				.Include(d => d.Persons)
+				.ToListAsync();				
 
 			if (documentSearched == null) return BadRequest("Document ID not found");
 

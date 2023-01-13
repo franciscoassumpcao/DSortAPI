@@ -9,6 +9,8 @@ namespace DSortAPI.Model
 		
 		public string? DocTitle { get; set; }
 		public List<Scan> Scans { get; set; }
+		public List<Person> Persons { get; set; }
+
 
 		//TODO
 		// Add the other fields for Document, like description, address, filepath, and so on

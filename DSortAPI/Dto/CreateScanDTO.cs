@@ -6,6 +6,5 @@
 		public string filePath { get; set; } = string.Empty;
 		public int DocumentId { get; set; } = 1;
 
-
 		}
 	}
