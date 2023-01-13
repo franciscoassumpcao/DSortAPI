@@ -1,6 +1,6 @@
 global using DSortAPI.Data;
 global using Microsoft.EntityFrameworkCore;
-global using BlazorInputFile;
+
 
 var builder = WebApplication.CreateBuilder(args);
 

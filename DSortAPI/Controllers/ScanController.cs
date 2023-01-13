@@ -2,6 +2,9 @@
 using DSortAPI.Dto;
 using DSortAPI.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Binders;
+using System.Reflection.Metadata;
+using System.Text.RegularExpressions;
 
 namespace DSortAPI.Controllers
 	{
@@ -74,6 +77,30 @@ namespace DSortAPI.Controllers
 			await _context.SaveChangesAsync();
 
 			return Ok(await _context.Scans.ToListAsync());
+			}
+
+		[HttpPost("{ScanId}")]
+		public async Task<ActionResult<Scan>> AddAttachmentToScan(int ScanId, byte[] attch)
+			{
+			var scan = await _context.Scans
+				.FindAsync(ScanId);
+
+			if (scan == null) return BadRequest("Scan Id not found");
+
+			scan.Attachment = attch;
+			_context.SaveChanges();
+
+			return Ok("Attachment added to Scan");
+			}
+
+		[HttpGet("ScanId")]
+		public byte[] DownloadFile(int ScanId)
+			{
+			byte[] attchment = _context.Scans.Find(ScanId).Attachment;
+
+			if (attchment == null) return null;
+
+			return attchment;
 			}
 
 
