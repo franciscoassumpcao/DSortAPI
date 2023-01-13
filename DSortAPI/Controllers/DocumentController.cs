@@ -10,12 +10,12 @@ namespace DSortAPI.Controllers
 	public class DocumentController : ControllerBase
 		{
 		private IMapper _mapper;
-		private DataContext _context;
+		private DataContext _context;		
 
 		public DocumentController(IMapper mapper, DataContext context)
 			{
 			_mapper = mapper;
-			_context = context;
+			_context = context;			
 			}
 
 		[HttpGet]
@@ -51,9 +51,9 @@ namespace DSortAPI.Controllers
 			{
 			_context.Documents.Add(documentToAdd);
 
-			await _context.SaveChangesAsync();
+			_context.SaveChanges();
 
-			return Ok(await _context.Documents.ToListAsync());
+			return Ok("Document added");
 
 			}
 

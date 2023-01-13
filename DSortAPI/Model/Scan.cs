@@ -7,7 +7,7 @@ namespace DSortAPI.Model
 
 		public int Id { get; set; }
 		public string NameScan { get; set; }=string.Empty;
-		public string filePath { get; set; } = string.Empty;
+		public byte[]? Attachment { get; set; }
 		[JsonIgnore]
 		public Document Document { get; set; }
 		public int DocumentId { get; set; }

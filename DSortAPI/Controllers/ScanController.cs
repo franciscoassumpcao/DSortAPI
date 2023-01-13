@@ -10,12 +10,12 @@ namespace DSortAPI.Controllers
 	public class ScanController : ControllerBase
 		{
 		public DataContext _context { get; set; }
-		private IMapper _mapper;
+		private IMapper _mapper;		
 
 		public ScanController(DataContext context, IMapper mapper)
 			{
 			_context = context;
-			_mapper = mapper;
+			_mapper = mapper;			
 			}
 
 		[HttpGet]

@@ -1,0 +1,91 @@
+﻿@page "/fileinput"
+@using FileUpload.Service
+@inject IFileUpload fileUpload;
+@using DSortAPI;
+@using DSortAPI.Data;
+@inject DSortAPI.IService.IDocumentService documentService;
+@using BlazorInputFile;
+@inject IJSRuntime jsRunTime;
+@using DSortAPI.Model;
+
+
+
+<h3>FileInput</h3>
+
+<BlazorInputFile.InputFile OnChange="HandleFileSelected(file, 1)"></BlazorInputFile.InputFile>
+
+
+@if (file != null)
+	{
+	<p>Scan Name:@file.Name</p>
+	<p>Size in Bytes:@file.Size</p>
+	<p>File type:@file.Type</p>
+
+	}
+
+
+@code {
+	
+	IFileListEntry file;
+	Scan scan = new Scan();
+	List<Scan> scans = new List<Scan>();
+
+	protected override async Task OnInitializedAsync()
+		{
+		GetAllScans();
+		}
+
+	async Task HandleFileSelected(IFileListEntry[] files, int ScanId)
+		{
+		file = files.FirstOrDefault();
+		if (file != null)
+			{
+			var attch = await FileSender(file);
+			documentService.UploadScanPdf(ScanId, attch);
+			await fileUpload.UploadAsync(file);
+			}
+		}
+
+	public async Task<byte[]> FileSender(IFileListEntry file)
+		{
+		using (var ms = new System.IO.MemoryStream())
+			{
+			await file.Data.CopyToAsync(ms);
+			return ms.ToArray();
+			}
+		}
+
+	public void DeleteScanPdf(int ScanPdf)
+		{
+		documentService.DeleteScanPdf(ScanPdf);
+		GetAllScans();
+		}
+
+	private void DownloadScanPdf(int ScanPdf)
+		{
+		var scan = scans.FirstOrDefault(s => s.Id == ScanPdf);
+		jsRunTime.InvokeVoidAsync("saveAsFile", "PdfFileName1", scan.Attachment);
+		GetAllScans();
+
+		}
+
+
+	private void GetAllScans()
+		{
+		scans = documentService.GetScanList();
+		}
+
+	private void AddNewScan()
+		{
+		scan = new Scan();
+		}
+
+	private void SaveScan()
+		{
+		documentService.Save(scan);
+		scan = new Scan();
+		GetAllScans();
+		}
+
+
+}
