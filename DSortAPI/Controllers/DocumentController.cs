@@ -23,6 +23,7 @@ namespace DSortAPI.Controllers
 			{
 			var documentsSearched = await _context.Documents
 				.Include(d => d.Persons)
+				.Include(d => d.Scans)
 				.ToListAsync();
 
 			if (documentsSearched == null) return BadRequest("Documents not found");
@@ -36,6 +37,7 @@ namespace DSortAPI.Controllers
 			var documentSearched = await _context.Documents
 				.Where(d => d.Id == docId)
 				.Include(d => d.Persons)
+				.Include(d => d.Scans)
 				.ToListAsync();				
 
 			if (documentSearched == null) return BadRequest("Document ID not found");

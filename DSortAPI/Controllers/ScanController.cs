@@ -29,6 +29,7 @@ namespace DSortAPI.Controllers
 			}
 
 
+
 		[HttpPost]
 		public async Task<ActionResult<List<Scan>>> Create(CreateScanDTO request)
 			{
@@ -42,8 +43,40 @@ namespace DSortAPI.Controllers
 			_context.Scans.Add(newScan);
 			await _context.SaveChangesAsync();
 			return await Get(newScan.DocumentId);
-
 			}
+
+		[HttpDelete("{scanId}")]
+		public async Task<ActionResult<Scan>> Delete(int scanId)
+			{
+			if (_context.Scans.Find(scanId) == null)
+				{
+				return BadRequest("Scan Id not found");
+				}
+
+			else {
+				_context.Scans.Remove(_context.Scans.Find(scanId));
+				await _context.SaveChangesAsync();				
+				}
+
+			return Ok("Scan deleted successfully");
+			}
+
+
+		[HttpPut]
+		public async Task<ActionResult<Scan>> UpdateScan(Scan newScan)
+			{
+			var scanSearched = await _context.Scans.FindAsync(newScan.Id);
+
+			if (scanSearched == null) return BadRequest("Scan ID not found");
+
+
+			_mapper.Map(newScan, scanSearched);
+			await _context.SaveChangesAsync();
+
+			return Ok(await _context.Scans.ToListAsync());
+			}
+
+
 
 		}
 	}

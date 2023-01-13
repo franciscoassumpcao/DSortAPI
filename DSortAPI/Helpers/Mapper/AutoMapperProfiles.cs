@@ -12,6 +12,7 @@ namespace DSortAPI.Helpers.Mapper
 			CreateMap<Person, Person>();
 			CreateMap<Scan, CreateScanDTO>();
 			CreateMap<CreateScanDTO, Scan>();
+			CreateMap<Scan, Scan>();
 			}
 
 
