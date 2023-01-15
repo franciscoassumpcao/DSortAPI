@@ -1,0 +1,56 @@
+﻿<!--region C# Code-->
+@page "/documents"
+@using DSortAPI.Model
+@using DSortAPI.Controllers
+@using DSortAPI.Data
+@using DSortAPI.Pages
+@inject DocumentController docController;
+@code {
+	private IEnumerable<Document> Data = null;
+	protected override async Task OnInitializedAsync()
+		{
+		await base.OnInitializedAsync();
+		//Data = await docController.GET();
+
+		}
+}
+
+<!--endregion-->
+<!--region HTML-->
+<h3>Document details</h3>
+@if (Data == null)
+	{
+	<h4>...Loading</h4>
+	}
+else
+	{
+	@if (Data.Any())
+		{
+		<table class="table" id="DocumentsTable">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Title</th>            
+					<th>Description</th>
+					<th>Phisical Address</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach(var item in Data)
+					{
+					<tr>
+						<td>item.Id</td>
+						<td>item.DocTitle</td>
+						<td>item.Description</td>
+						<td>item.PhisicalAddress</td>
+					</tr>
+					}
+			</tbody>
+		</table>
+
+		}
+}
+
+
+<!--endregion-->
+

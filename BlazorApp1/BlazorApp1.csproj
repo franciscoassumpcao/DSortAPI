@@ -6,9 +6,4 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BlazorApp1\BlazorApp1.csproj" />
-    <ProjectReference Include="..\DSortAPI\DSortAPI.csproj" />
-  </ItemGroup>
-
 </Project>

@@ -45,7 +45,7 @@ namespace DSortAPI.Controllers
 			var person = await _context.Persons.FindAsync(request.PersonId);
 			if (person == null) { return NotFound("Person not found"); }
 
-			document.Persons.Add(person);
+			_context.Persons.Add(person);
 			await _context.SaveChangesAsync();
 
 			return person;

@@ -10,25 +10,27 @@ namespace DSortAPI.Controllers
 	public class DocumentController : ControllerBase
 		{
 		private IMapper _mapper;
-		private DataContext _context;		
+		private DataContext _context;
+		private readonly HttpClient httpClient;
 
-		public DocumentController(IMapper mapper, DataContext context)
+		public DocumentController(IMapper mapper, DataContext context, HttpClient _httpClient)
 			{
 			_mapper = mapper;
-			_context = context;			
+			_context = context;
+			this.httpClient = _httpClient;
 			}
 
 		[HttpGet]
-		public async Task<ActionResult<List<Document>>> GetAllDocuments()
+		public async Task<ActionResult<List<Document>>> GET()
 			{
 			var documentsSearched = await _context.Documents
 				.Include(d => d.Persons)
 				.Include(d => d.Scans)
 				.ToListAsync();
 
-			if (documentsSearched == null) return BadRequest("Documents not found");
+			if (documentsSearched == null) return null;
 
-			return Ok(documentsSearched);
+			return documentsSearched;
 			}
 
 		[HttpGet("{docId}")]

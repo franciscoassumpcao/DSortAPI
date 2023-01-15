@@ -1,46 +1,87 @@
 ﻿@page
+@using DSortAPI.Model;
 @model IndexModel
-@using DSortAPI.Data
-@using DSortAPI.Model
-@using DSortAPI.Controllers
+
 @{
-    ViewData["Title"] = "Home page";
+    var client = new HttpClient();
+    int currentDocId = 0;
+
+    static async Task<List<Document>> GetJsonHttpClient(string uri, HttpClient httpClient)
+        {
+        return await httpClient.GetFromJsonAsync<List<Document>>(uri);
+        }
+
+    async void DeleteDocHttpClient()
+        {
+        var request = new HttpRequestMessage
+                {
+                    Method = HttpMethod.Delete,
+                    RequestUri = new Uri("https://localhost:7135/api/Document/"+currentDocId.ToString())
+        };
+        var client = new HttpClient();
+
+        await client.SendAsync(request);       
+
+        }
+
+    List<Document> documents = GetJsonHttpClient("https://localhost:7135/api/Document", client).Result;
 
 }
+
+<!--region C# Code-->
+
+<!--endregion-->
+
+<!--region HTML-->
+<!--endregion-->
 
 <div class="text-center">
     <h1 class="display-4">Doc Sort App</h1>
     <br/>
     <p>List of Documents</p>
 
-    @{
-        
-    }
-
-
-    <table>
+<table id="DocumentsTable">
+    <thead>
         <tr>
-            <th>Id</th>
-            <th>Title</th>
-            <th>N. Scans</th>
-            <th>N. Persons</th>
+            <th>ID</th>
+            <th>Title</th>            
             <th>Description</th>
             <th>Phisical Address</th>
+            <th>Person</th>
+            <th>Delete</th>
+            
         </tr>
-     @{
+    </thead>
+    <tbody>
+            @using (Html.BeginForm("DeleteDocHttpClient", "Button"))
+                {
+                @foreach (var doc in documents)
+                    {
+                    currentDocId = doc.Id;
+                    string person = " ";
+                    if (doc.Persons != null)
+                        {
+                        if (doc.Persons.FirstOrDefault() != null)
+                            {
+                            person = doc.Persons.FirstOrDefault().Name.ToString();
+                            }
+                        }
+                    string uriDocWithId = "https://localhost:7135/api/Document/" + doc.Id.ToString();
+                    <tr>
+                        <td>@doc.Id</td>
+                        <td>@doc.DocTitle</td>
+                        <td>@doc.Description</td>
+                        <td>@doc.PhisicalAddress</td>
+                        <td>@person</td>
+                        <td></td>
 
+                    </tr>
+                    }
+                    }
 
+                 
+        </tbody>
 
-     }
-
-
-
-
-
-
-
-
-    </table>
-
+</table>
 </div>
 
