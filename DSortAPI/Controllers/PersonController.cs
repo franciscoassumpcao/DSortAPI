@@ -21,12 +21,9 @@ namespace DSortAPI.Controllers
 			}
 
 		[HttpPost]
-		public async Task<ActionResult<List<Person>>> CreateNewPerson(string name)			
-			{
-			Person newPerson = new Person();
-			newPerson.Name = name;
-
-			_context.Persons.Add(newPerson);
+		public async Task<ActionResult<List<Person>>> CreateNewPerson(Person person)			
+			{			
+			_context.Persons.Add(person);
 			await _context.SaveChangesAsync();
 
 			return Ok(await _context.Persons.ToListAsync());

@@ -9,7 +9,7 @@ namespace DSortAPI.Model
 		
 		public string Name { get; set; } = string.Empty;
 		[JsonIgnore]
-		public List<Document> Documents { get; set; }
+		public List<Document>? Documents { get; set; }
 
 		}
 	}
