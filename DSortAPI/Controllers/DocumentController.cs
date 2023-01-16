@@ -24,12 +24,12 @@ namespace DSortAPI.Controllers
 		[HttpGet("getAllDocuments")]
 		public async Task<ActionResult<List<ReadDocumentDto>>> GET()
 			{
-			var documentsSearched = await _context.Documents
+			List<Document> documentsSearched = await _context.Documents
 				.Include(d => d.Persons)
 				.Include(d => d.Scans)
 				.ToListAsync();
 
-			if (documentsSearched == null) return null;
+			if (documentsSearched == null) return BadRequest("Documents not found");
 
 
 			List<ReadDocumentDto> documentsDto = new List<ReadDocumentDto>();
@@ -45,20 +45,24 @@ namespace DSortAPI.Controllers
 			}
 
 		[HttpGet("getDocumentWithId/{docId}")]
-		public async Task<ActionResult<List<ReadDocumentDto>>> GetSingleDocument(int docId)
+		public async Task<ActionResult<ReadDocumentDto>> GetSingleDocument(int docId)
 			{
-			var documentSearched = await _context.Documents
-				.Where(d => d.Id == docId)
-				.Include(d => d.Persons)
-				.Include(d => d.Scans)
-				.ToListAsync();				
+			if (await _context.Documents.FirstOrDefaultAsync(d => d.Id == docId) != null)
+				{
+                ReadDocumentDto dto = new ReadDocumentDto();
+				Document documentSearched = new Document();
+				documentSearched = await _context.Documents
+					.Where(d => d.Id == docId)
+                    .Include(d => d.Persons)
+					.Include(d => d.Scans)                
+					.FirstOrDefaultAsync();
 
-			if (documentSearched == null) return BadRequest("Document ID not found");
+                _mapper.Map(documentSearched, dto);
 
-			ReadDocumentDto dto = new ReadDocumentDto();
-			_mapper.Map(documentSearched, dto);
+                return Ok(dto);
+                }
 
-			return Ok(dto);
+			return BadRequest("doc Id not found");		
 
 			}
 
