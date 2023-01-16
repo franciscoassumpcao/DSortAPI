@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using DSortAPI.Dto.Document;
 using DSortAPI.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DSortAPI.Controllers
-	{
-	[Route("api/[controller]")]
+{
+    [Route("api/[controller]")]
 	[ApiController]
 	public class DocumentController : ControllerBase
 		{
@@ -20,8 +21,8 @@ namespace DSortAPI.Controllers
 			this.httpClient = _httpClient;
 			}
 
-		[HttpGet]
-		public async Task<ActionResult<List<Document>>> GET()
+		[HttpGet("getAllDocuments")]
+		public async Task<ActionResult<List<ReadDocumentDto>>> GET()
 			{
 			var documentsSearched = await _context.Documents
 				.Include(d => d.Persons)
@@ -30,11 +31,21 @@ namespace DSortAPI.Controllers
 
 			if (documentsSearched == null) return null;
 
-			return documentsSearched;
+
+			List<ReadDocumentDto> documentsDto = new List<ReadDocumentDto>();
+			foreach (var doc in documentsSearched)
+				{
+				ReadDocumentDto dto = new ReadDocumentDto();
+				_mapper.Map(doc, dto);
+				documentsDto.Add(dto);
+				}
+
+
+			return documentsDto;
 			}
 
-		[HttpGet("{docId}")]
-		public async Task<ActionResult<List<Document>>> GetSingleDocument(int docId)
+		[HttpGet("getDocumentWithId/{docId}")]
+		public async Task<ActionResult<List<ReadDocumentDto>>> GetSingleDocument(int docId)
 			{
 			var documentSearched = await _context.Documents
 				.Where(d => d.Id == docId)
@@ -44,14 +55,20 @@ namespace DSortAPI.Controllers
 
 			if (documentSearched == null) return BadRequest("Document ID not found");
 
-			return Ok(documentSearched);
+			ReadDocumentDto dto = new ReadDocumentDto();
+			_mapper.Map(documentSearched, dto);
+
+			return Ok(dto);
 
 			}
 
-		[HttpPost]
-		public async Task<ActionResult<List<Document>>> CreateDocument(Document documentToAdd)
+		[HttpPost("createNewDocument")]
+		public async Task<ActionResult<List<Document>>> CreateDocument(CreateDocumentDto dto)
 			{
-			_context.Documents.Add(documentToAdd);
+			Document documentToAdd = new Document();
+			_mapper.Map(dto,documentToAdd);
+
+            _context.Documents.Add(documentToAdd);
 
 			_context.SaveChanges();
 
@@ -59,7 +76,7 @@ namespace DSortAPI.Controllers
 
 			}
 
-		[HttpPut]
+		[HttpPut("updateNewDocument")]
 		public async Task<ActionResult<List<Document>>> UpdateDocument(Document newInfoDocument)
 			{
 			var documentSearched = await _context.Documents.FindAsync(newInfoDocument.Id);				
@@ -74,7 +91,7 @@ namespace DSortAPI.Controllers
 			}
 
 
-		[HttpDelete("{docId}")]
+		[HttpDelete("deleteDocumentWithId/{docId}")]
 		public async Task<ActionResult<List<Document>>> DeleteDocument(int docId)
 			{
 			var documentSearched = await _context.Documents.FindAsync(docId);

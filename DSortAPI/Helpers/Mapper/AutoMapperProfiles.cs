@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using DSortAPI.Dto;
+using DSortAPI.Dto.Document;
 using DSortAPI.Model;
 
 namespace DSortAPI.Helpers.Mapper
-	{
-	public class AutoMapperProfiles : Profile
+{
+    public class AutoMapperProfiles : Profile
 		{
 		public AutoMapperProfiles()
 			{
@@ -13,6 +14,8 @@ namespace DSortAPI.Helpers.Mapper
 			CreateMap<Scan, CreateScanDTO>();
 			CreateMap<CreateScanDTO, Scan>();
 			CreateMap<Scan, Scan>();
+			CreateMap<CreateDocumentDto,Document>();
+			CreateMap<Document, ReadDocumentDto>();
 			}
 
 

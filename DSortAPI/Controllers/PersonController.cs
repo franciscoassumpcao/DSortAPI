@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using DSortAPI.Dto;
+using DSortAPI.Dto.Document;
 using DSortAPI.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DSortAPI.Controllers
-	{
-	[Route("api/[controller]")]
+{
+    [Route("api/[controller]")]
 	[ApiController]
 	public class PersonController : ControllerBase
 		{
@@ -20,7 +20,7 @@ namespace DSortAPI.Controllers
 			_context = context;
 			}
 
-		[HttpPost]
+		[HttpPost("createNewPersonJson")]
 		public async Task<ActionResult<List<Person>>> CreateNewPerson(Person person)			
 			{			
 			_context.Persons.Add(person);
@@ -29,7 +29,18 @@ namespace DSortAPI.Controllers
 			return Ok(await _context.Persons.ToListAsync());
 			}
 
-		[HttpPost("personDocument")]
+        [HttpPost("postNewPersonWithName/{newPersonName}")]
+        public async Task<ActionResult<List<Person>>> CreateNewPerson(string newPersonName)
+            {
+			Person personToAdd = new Person();
+			personToAdd.Name = newPersonName;
+            _context.Persons.Add(personToAdd);
+            await _context.SaveChangesAsync();
+
+            return Ok(await _context.Persons.ToListAsync());
+            }
+
+        [HttpPost("personDocument")]
 		public async Task<ActionResult<Person>> AddDocumentPerson(AddDocumentPersonDto request)
 			{
 			var document = await _context.Documents
@@ -48,7 +59,7 @@ namespace DSortAPI.Controllers
 			return person;
 			}
 
-		[HttpGet("{personId}")]
+		[HttpGet("getPersonWithId/{personId}")]
 		public async Task<ActionResult<List<Person>>> GetPersonId(int personId)
 			{
 			var personSearched = await _context.Persons
@@ -61,7 +72,7 @@ namespace DSortAPI.Controllers
 			return Ok(personSearched);
 			}
 
-		[HttpGet]
+		[HttpGet("getAllPerson")]
 		public async Task<ActionResult<List<Person>>> GetAll()
 			{
 			if (_context.Persons.Any())
@@ -74,7 +85,7 @@ namespace DSortAPI.Controllers
 			else return BadRequest("Persons not found");
 			}
 
-		[HttpDelete]
+		[HttpDelete("deletePersonWithId/{PersonId}")]
 		public async Task<ActionResult<List<Person>>> DeletePerson(int PersonId)
 			{
 			if (await _context.Persons.FindAsync(PersonId)== null){
@@ -86,27 +97,22 @@ namespace DSortAPI.Controllers
 			return Ok();
 			}
 
-		[HttpPut]
+		[HttpPut("UpdateNewPerson")]
 		public async Task<ActionResult<List<Person>>> UpdatePersonInfo(Person personToUpdate)
 			{
 
 
-			var personSearched = await _context.Documents.FindAsync(personToUpdate.Id);
+			var personSearched = await _context.Persons.FindAsync(personToUpdate.Id);
 
 			if (personSearched == null) return BadRequest("Document ID not found");
 
 
 			_mapper.Map(personToUpdate, personSearched);
+			
 			await _context.SaveChangesAsync();
 
 			return Ok(await _context.Persons.ToListAsync());
 
-
 			}
-
-
-
-
-
 		}
 	}
