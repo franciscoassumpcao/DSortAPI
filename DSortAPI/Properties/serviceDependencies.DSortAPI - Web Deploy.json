@@ -14,6 +14,13 @@
       "ignored": "true",
       "type": "mssql",
       "connectionId": "MyConnectionString"
+    },
+    "storage1": {
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/dsortstorage",
+      "type": "storage.azure",
+      "connectionId": "Storage:ConnectionString",
+      "dynamicId": null
     }
   }
 }

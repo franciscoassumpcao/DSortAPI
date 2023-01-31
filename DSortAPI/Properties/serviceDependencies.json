@@ -10,6 +10,11 @@
     "mssql2": {
       "type": "mssql",
       "connectionId": "MyConnectionString"
+    },
+    "storage1": {
+      "type": "storage",
+      "connectionId": "Storage:ConnectionString",
+      "dynamicId": null
     }
   }
 }
