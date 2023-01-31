@@ -9,7 +9,7 @@ namespace DSortAPI.Dto.Document
 
         public string DocTitle { get; set; }=string.Empty;
 
-        public string? ScanPath { get; set; }
+        public string ScanPath { get; set; }
 
         public List<Person> Persons { get; set; } = new List<Person>();
         public string Description { get; set; }=string.Empty;

@@ -7,9 +7,9 @@ namespace DSortAPI.Dto.Document
     {
         public string DocTitle { get; set; } = string.Empty;
 
-        public string? Description { get; set; }
-        public string? PhisicalAddress { get; set; }
-        public string? ScanPath { get; set; }
+        public string Description { get; set; }
+        public string PhisicalAddress { get; set; }
+        public string ScanPath { get; set; }
 
     }
 }
