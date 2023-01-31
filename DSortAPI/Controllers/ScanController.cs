@@ -21,6 +21,7 @@ namespace DSortAPI.Controllers
 			_mapper = mapper;			
 			}
 
+        /*
 		[HttpGet]
 		public async Task<ActionResult<List<Scan>>> Get(int DocumentId)
 			{
@@ -32,7 +33,7 @@ namespace DSortAPI.Controllers
 			}
 
 
-
+		
 		[HttpPost]
 		public async Task<ActionResult<List<Scan>>> Create(CreateScanDTO request)
 			{
@@ -103,7 +104,7 @@ namespace DSortAPI.Controllers
 			return attchment;
 			}
 
+			*/
 
-
-		}
-	}
+        }
+    }

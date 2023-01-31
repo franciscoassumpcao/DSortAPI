@@ -9,6 +9,7 @@ namespace DSortAPI.Dto.Document
 
         public string? Description { get; set; }
         public string? PhisicalAddress { get; set; }
+        public string? ScanPath { get; set; }
 
     }
 }

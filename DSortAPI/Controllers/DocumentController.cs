@@ -26,8 +26,8 @@ namespace DSortAPI.Controllers
 			{
 			List<Document> documentsSearched = await _context.Documents
 				.Include(d => d.Persons)
-				.Include(d => d.Scans)
-				.ToListAsync();
+                //.Include(d => d.Scans)   
+                .ToListAsync();
 
 			if (documentsSearched == null) return BadRequest("Documents not found");
 
@@ -54,7 +54,7 @@ namespace DSortAPI.Controllers
 				documentSearched = await _context.Documents
 					.Where(d => d.Id == docId)
                     .Include(d => d.Persons)
-					.Include(d => d.Scans)                
+					//.Include(d => d.Scans)                
 					.FirstOrDefaultAsync();
 
                 _mapper.Map(documentSearched, dto);
@@ -75,10 +75,9 @@ namespace DSortAPI.Controllers
             _context.Documents.Add(documentToAdd);
 
 			_context.SaveChanges();
-
-			return Ok("Document added");
-
-			}
+			
+            return Ok(await _context.Documents.ToListAsync());
+            }
 
 		[HttpPut("updateNewDocument")]
 		public async Task<ActionResult<List<Document>>> UpdateDocument(Document newInfoDocument)

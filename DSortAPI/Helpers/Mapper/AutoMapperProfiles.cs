@@ -11,9 +11,9 @@ namespace DSortAPI.Helpers.Mapper
 			{
 			CreateMap<Document, Document>();
 			CreateMap<Person, Person>();
-			CreateMap<Scan, CreateScanDTO>();
-			CreateMap<CreateScanDTO, Scan>();
-			CreateMap<Scan, Scan>();
+			//CreateMap<Scan, CreateScanDTO>();
+			//CreateMap<CreateScanDTO, Scan>();
+			//CreateMap<Scan, Scan>();
 			CreateMap<CreateDocumentDto,Document>();
 			CreateMap<Document, ReadDocumentDto>();
 			}

@@ -5,8 +5,7 @@ namespace DSortAPI.Model
 	{
 	public class Person
 		{		
-		public int Id { get; set; }
-		
+		public int Id { get; set; }		
 		public string Name { get; set; } = string.Empty;
 		[JsonIgnore]
 		public List<Document>? Documents { get; set; }

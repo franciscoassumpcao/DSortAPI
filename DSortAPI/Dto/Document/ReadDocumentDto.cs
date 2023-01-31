@@ -8,8 +8,8 @@ namespace DSortAPI.Dto.Document
 		public int Id { get; set; }
 
         public string DocTitle { get; set; }=string.Empty;
-        
-        public List<Scan> Scans { get; set; }=new List<Scan>();
+
+        public string? ScanPath { get; set; }
 
         public List<Person> Persons { get; set; } = new List<Person>();
         public string Description { get; set; }=string.Empty;

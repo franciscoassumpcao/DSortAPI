@@ -100,12 +100,9 @@ namespace DSortAPI.Controllers
 		[HttpPut("UpdateNewPerson")]
 		public async Task<ActionResult<List<Person>>> UpdatePersonInfo(Person personToUpdate)
 			{
-
-
 			var personSearched = await _context.Persons.FindAsync(personToUpdate.Id);
 
-			if (personSearched == null) return BadRequest("Document ID not found");
-
+			if (personSearched == null) return BadRequest("Person ID not found");
 
 			_mapper.Map(personToUpdate, personSearched);
 			
