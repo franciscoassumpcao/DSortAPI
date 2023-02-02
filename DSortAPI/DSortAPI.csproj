@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Dto\PersonDtos\" />
     <Folder Include="IService\" />
     <Folder Include="View\Pages\" />
   </ItemGroup>

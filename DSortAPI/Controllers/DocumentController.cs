@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DSortAPI.Dto.Document;
+using DSortAPI.Helpers.Physical_Address;
 using DSortAPI.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +13,16 @@ namespace DSortAPI.Controllers
 		{
 		private IMapper _mapper;
 		private DataContext _context;
-		private readonly HttpClient httpClient;
+		private readonly HttpClient _httpClient;
+		private pAddressCalculator _addressCalculator;
 
-		public DocumentController(IMapper mapper, DataContext context, HttpClient _httpClient)
+
+		public DocumentController(IMapper mapper, DataContext context, HttpClient httpClient)
 			{
 			_mapper = mapper;
 			_context = context;
-			this.httpClient = _httpClient;
+			_httpClient = httpClient;
+			_addressCalculator = new pAddressCalculator(_context);			
 			}
 
 		[HttpGet("getAllDocuments")]
@@ -67,16 +71,18 @@ namespace DSortAPI.Controllers
 			}
 
 		[HttpPost("createNewDocument")]
-		public async Task<ActionResult<List<Document>>> CreateDocument(CreateDocumentDto dto)
+		public async Task<ActionResult<Document>> CreateDocument(CreateDocumentDto dto)
 			{
 			Document documentToAdd = new Document();
 			_mapper.Map(dto,documentToAdd);
 
+			documentToAdd.PhisicalAddress = _addressCalculator.pAddressCalculatorFunction((int)dto.CategoryId);
+
             _context.Documents.Add(documentToAdd);
 
 			_context.SaveChanges();
-			
-            return Ok(await _context.Documents.ToListAsync());
+
+			return documentToAdd;
             }
 
 		[HttpPut("updateNewDocument")]

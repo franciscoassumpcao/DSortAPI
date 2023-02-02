@@ -9,7 +9,7 @@ namespace DSortAPI.Model
 		
 		public string DocTitle { get; set; } = string.Empty;	
 		
-		public List<Person> Persons { get; set; } = new List<Person>();
+		public List<Person>? Persons { get; set; } = new List<Person>();
 		public string ScanPath { get; set; } = string.Empty;
 		public string Description { get; set; } =string.Empty;
 		public string PhisicalAddress { get; set; } = string.Empty;
